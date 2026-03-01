@@ -1,0 +1,32 @@
+CALTECH-101 IMAGE CLASSIFICATION - TECHNICAL SUMMARY
+=======================================================
+
+Date             : 2026-02-27 13:53:13
+Dataset          : Caltech-101
+Classes          : 101
+Total samples    : 8677
+Model            : ResNet18 (pretrained=yes)
+Image size       : 224x224
+Batch size       : 64
+Max epochs       : 30
+Learning rate    : 0.0005
+Dropout          : 0.5
+Device           : cpu
+
+TRAINING STRATEGY
+----------------------------------------
+Phase 1: Head-only training (5 epochs, backbone frozen)
+Phase 2: Full fine-tuning (remaining epochs, differential LR)
+Early stopping   : patience=7
+Data augmentation: RandomResizedCrop, HorizontalFlip, Rotation, ColorJitter
+
+EVALUATION RESULTS
+----------------------------------------
+Test Accuracy    : 91.63%
+Top-5 Accuracy   : 98.77%
+Precision (macro): 90.41%
+Recall (macro)   : 86.45%
+F1 (macro)       : 87.37%
+F1 (weighted)    : 91.14%
+
+Total time       : 572.0 minutes

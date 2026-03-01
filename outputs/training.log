@@ -1,0 +1,286 @@
+2026-02-27 04:21:15 | INFO     | Caltech-101 Image Classification with ResNet18
+2026-02-27 04:21:15 | INFO     | Mode: full | Device: cpu
+2026-02-27 04:21:15 | INFO     | Data directory: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\Caltech101_Dataset\caltech-101
+2026-02-27 04:21:15 | INFO     | Loading dataset...
+2026-02-27 04:21:16 | INFO     | Dataset loaded: 8677 samples, 101 classes
+2026-02-27 04:21:16 | INFO     | ============================================================
+2026-02-27 04:21:16 | INFO     | PHASE: DATASET ANALYSIS
+2026-02-27 04:21:16 | INFO     | ============================================================
+2026-02-27 04:21:16 | INFO     | ============================================================
+2026-02-27 04:21:16 | INFO     | DATASET ANALYSIS
+2026-02-27 04:21:16 | INFO     | ============================================================
+2026-02-27 04:21:16 | INFO     | Total samples     : 8677
+2026-02-27 04:21:16 | INFO     | Number of classes  : 101
+2026-02-27 04:21:16 | INFO     | Min samples/class  : 31
+2026-02-27 04:21:16 | INFO     | Max samples/class  : 800
+2026-02-27 04:21:16 | INFO     | Mean samples/class : 85.9
+2026-02-27 04:21:16 | INFO     | Median             : 59.0
+2026-02-27 04:21:16 | INFO     | Std dev            : 117.8
+2026-02-27 04:21:16 | INFO     | Overrepresented    : ['Faces', 'Faces_easy', 'Motorbikes', 'airplanes']
+2026-02-27 04:21:16 | INFO     | ============================================================
+2026-02-27 04:21:17 | INFO     | Class distribution plot saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\plots\class_distribution.png
+2026-02-27 04:21:17 | INFO     | Metrics saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\metrics\dataset_analysis.json
+2026-02-27 04:21:17 | INFO     | ============================================================
+2026-02-27 04:21:17 | INFO     | PHASE: MODEL TRAINING
+2026-02-27 04:21:17 | INFO     | ============================================================
+2026-02-27 04:21:17 | INFO     | Creating stratified train/val/test splits...
+2026-02-27 04:21:17 | INFO     | Split sizes — Train: 6073, Val: 1302, Test: 1302
+2026-02-27 04:21:17 | INFO     | Loading ResNet18 with pretrained ImageNet weights
+2026-02-27 04:21:17 | INFO     | Model built: ResNet18 → 101 classes (in_features=512, dropout=0.5)
+2026-02-27 04:21:17 | INFO     | Model moved to device: cpu
+2026-02-27 04:21:17 | INFO     | Model parameters: {
+  "total_parameters": 11228325,
+  "trainable_parameters": 11228325,
+  "frozen_parameters": 0,
+  "trainable_pct": 100.0
+}
+2026-02-27 04:21:17 | INFO     | ============================================================
+2026-02-27 04:21:17 | INFO     | PHASE 1: Training classification head (backbone frozen)
+2026-02-27 04:21:17 | INFO     | ============================================================
+2026-02-27 04:21:17 | INFO     | Backbone frozen: 60 parameter groups frozen
+2026-02-27 04:21:17 | INFO     | Trainable params: 51,813 / 11,228,325 (0.46%)
+2026-02-27 04:21:17 | INFO     | Scheduler: step
+2026-02-27 04:30:43 | INFO     | Epoch [01/30] | Train Loss: 3.8345 | Train Acc: 21.21% | Val Loss: 2.6406 | Val Acc: 42.09% | LR: 5.00e-04 | Time: 566.1s
+2026-02-27 04:30:43 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 1, val_acc=42.0891)
+2026-02-27 04:30:43 | INFO     | ★ New best model! Val Acc: 42.09%
+2026-02-27 04:39:08 | INFO     | Epoch [02/30] | Train Loss: 2.5694 | Train Acc: 43.45% | Val Loss: 1.7859 | Val Acc: 63.90% | LR: 5.00e-04 | Time: 505.1s
+2026-02-27 04:39:08 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 2, val_acc=63.9017)
+2026-02-27 04:39:08 | INFO     | ★ New best model! Val Acc: 63.90%
+2026-02-27 04:47:52 | INFO     | Epoch [03/30] | Train Loss: 1.9408 | Train Acc: 58.13% | Val Loss: 1.3253 | Val Acc: 73.73% | LR: 5.00e-04 | Time: 523.9s
+2026-02-27 04:47:52 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 3, val_acc=73.7327)
+2026-02-27 04:47:52 | INFO     | ★ New best model! Val Acc: 73.73%
+2026-02-27 04:56:07 | INFO     | Epoch [04/30] | Train Loss: 1.5840 | Train Acc: 65.01% | Val Loss: 1.0552 | Val Acc: 78.34% | LR: 5.00e-04 | Time: 494.8s
+2026-02-27 04:56:07 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 4, val_acc=78.3410)
+2026-02-27 04:56:07 | INFO     | ★ New best model! Val Acc: 78.34%
+2026-02-27 05:05:58 | INFO     | Epoch [05/30] | Train Loss: 1.3548 | Train Acc: 69.69% | Val Loss: 0.8974 | Val Acc: 81.49% | LR: 5.00e-04 | Time: 591.1s
+2026-02-27 05:05:58 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 5, val_acc=81.4900)
+2026-02-27 05:05:58 | INFO     | ★ New best model! Val Acc: 81.49%
+2026-02-27 05:05:58 | INFO     | ============================================================
+2026-02-27 05:05:58 | INFO     | PHASE 2: Fine-tuning entire network (backbone unfrozen)
+2026-02-27 05:05:58 | INFO     | ============================================================
+2026-02-27 05:05:58 | INFO     | Backbone unfrozen: 62 parameter groups trainable
+2026-02-27 05:05:58 | INFO     | Scheduler: step
+2026-02-27 05:05:58 | INFO     | Trainable params: 11,228,325 / 11,228,325 (100.0%)
+2026-02-27 05:22:14 | INFO     | Epoch [06/30] | Train Loss: 1.0999 | Train Acc: 75.99% | Val Loss: 0.7456 | Val Acc: 84.64% | LR: 5.00e-05 | Time: 975.7s
+2026-02-27 05:22:14 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 6, val_acc=84.6390)
+2026-02-27 05:22:14 | INFO     | ★ New best model! Val Acc: 84.64%
+2026-02-27 05:55:26 | INFO     | Epoch [07/30] | Train Loss: 0.9042 | Train Acc: 80.32% | Val Loss: 0.6677 | Val Acc: 86.48% | LR: 5.00e-05 | Time: 1991.7s
+2026-02-27 05:55:26 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 7, val_acc=86.4823)
+2026-02-27 05:55:26 | INFO     | ★ New best model! Val Acc: 86.48%
+2026-02-27 06:11:30 | INFO     | Epoch [08/30] | Train Loss: 0.8209 | Train Acc: 82.84% | Val Loss: 0.5952 | Val Acc: 88.71% | LR: 5.00e-05 | Time: 964.0s
+2026-02-27 06:11:30 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 8, val_acc=88.7097)
+2026-02-27 06:11:30 | INFO     | ★ New best model! Val Acc: 88.71%
+2026-02-27 06:27:34 | INFO     | Epoch [09/30] | Train Loss: 0.7225 | Train Acc: 84.26% | Val Loss: 0.5476 | Val Acc: 89.48% | LR: 5.00e-05 | Time: 963.7s
+2026-02-27 06:27:34 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 9, val_acc=89.4777)
+2026-02-27 06:27:34 | INFO     | ★ New best model! Val Acc: 89.48%
+2026-02-27 06:43:39 | INFO     | Epoch [10/30] | Train Loss: 0.6506 | Train Acc: 86.55% | Val Loss: 0.4973 | Val Acc: 90.48% | LR: 5.00e-05 | Time: 965.3s
+2026-02-27 06:43:40 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 10, val_acc=90.4762)
+2026-02-27 06:43:40 | INFO     | ★ New best model! Val Acc: 90.48%
+2026-02-27 06:59:38 | INFO     | Epoch [11/30] | Train Loss: 0.6024 | Train Acc: 87.21% | Val Loss: 0.4640 | Val Acc: 90.78% | LR: 5.00e-05 | Time: 958.6s
+2026-02-27 06:59:38 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 11, val_acc=90.7834)
+2026-02-27 06:59:38 | INFO     | ★ New best model! Val Acc: 90.78%
+2026-02-27 07:15:41 | INFO     | Epoch [12/30] | Train Loss: 0.5659 | Train Acc: 87.78% | Val Loss: 0.4405 | Val Acc: 91.17% | LR: 5.00e-05 | Time: 962.2s
+2026-02-27 07:15:41 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 12, val_acc=91.1674)
+2026-02-27 07:15:41 | INFO     | ★ New best model! Val Acc: 91.17%
+2026-02-27 07:31:48 | INFO     | Epoch [13/30] | Train Loss: 0.5284 | Train Acc: 88.92% | Val Loss: 0.4343 | Val Acc: 90.94% | LR: 5.00e-06 | Time: 967.5s
+2026-02-27 07:48:41 | INFO     | Epoch [14/30] | Train Loss: 0.5311 | Train Acc: 88.69% | Val Loss: 0.4304 | Val Acc: 91.09% | LR: 5.00e-06 | Time: 1013.1s
+2026-02-27 08:12:00 | INFO     | Epoch [15/30] | Train Loss: 0.5158 | Train Acc: 89.13% | Val Loss: 0.4356 | Val Acc: 91.24% | LR: 5.00e-06 | Time: 1398.6s
+2026-02-27 08:12:00 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 15, val_acc=91.2442)
+2026-02-27 08:12:00 | INFO     | ★ New best model! Val Acc: 91.24%
+2026-02-27 08:38:17 | INFO     | Epoch [16/30] | Train Loss: 0.5239 | Train Acc: 88.70% | Val Loss: 0.4326 | Val Acc: 91.40% | LR: 5.00e-06 | Time: 1576.2s
+2026-02-27 08:38:17 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 16, val_acc=91.3978)
+2026-02-27 08:38:17 | INFO     | ★ New best model! Val Acc: 91.40%
+2026-02-27 09:30:39 | INFO     | Epoch [17/30] | Train Loss: 0.5039 | Train Acc: 89.20% | Val Loss: 0.4263 | Val Acc: 91.32% | LR: 5.00e-06 | Time: 3142.4s
+2026-02-27 09:48:12 | INFO     | Epoch [18/30] | Train Loss: 0.5075 | Train Acc: 89.17% | Val Loss: 0.4256 | Val Acc: 91.47% | LR: 5.00e-06 | Time: 1053.0s
+2026-02-27 09:48:12 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 18, val_acc=91.4747)
+2026-02-27 09:48:12 | INFO     | ★ New best model! Val Acc: 91.47%
+2026-02-27 10:05:21 | INFO     | Epoch [19/30] | Train Loss: 0.5006 | Train Acc: 89.35% | Val Loss: 0.4170 | Val Acc: 91.40% | LR: 5.00e-06 | Time: 1028.3s
+2026-02-27 10:22:01 | INFO     | Epoch [20/30] | Train Loss: 0.5139 | Train Acc: 89.03% | Val Loss: 0.4170 | Val Acc: 91.40% | LR: 5.00e-07 | Time: 1000.1s
+2026-02-27 10:39:22 | INFO     | Epoch [21/30] | Train Loss: 0.5071 | Train Acc: 88.80% | Val Loss: 0.4214 | Val Acc: 91.55% | LR: 5.00e-07 | Time: 1041.0s
+2026-02-27 10:39:22 | INFO     | Checkpoint saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 21, val_acc=91.5515)
+2026-02-27 10:39:22 | INFO     | ★ New best model! Val Acc: 91.55%
+2026-02-27 11:03:11 | INFO     | Epoch [22/30] | Train Loss: 0.4915 | Train Acc: 89.81% | Val Loss: 0.4153 | Val Acc: 91.24% | LR: 5.00e-07 | Time: 1429.5s
+2026-02-27 11:25:08 | INFO     | Epoch [23/30] | Train Loss: 0.4895 | Train Acc: 89.79% | Val Loss: 0.4172 | Val Acc: 91.47% | LR: 5.00e-07 | Time: 1317.0s
+2026-02-27 11:47:47 | INFO     | Epoch [24/30] | Train Loss: 0.4989 | Train Acc: 89.31% | Val Loss: 0.4162 | Val Acc: 91.24% | LR: 5.00e-07 | Time: 1359.1s
+2026-02-27 12:16:29 | INFO     | Epoch [25/30] | Train Loss: 0.5057 | Train Acc: 89.30% | Val Loss: 0.4181 | Val Acc: 91.47% | LR: 5.00e-07 | Time: 1721.7s
+2026-02-27 12:33:50 | INFO     | Epoch [26/30] | Train Loss: 0.4908 | Train Acc: 89.61% | Val Loss: 0.4184 | Val Acc: 91.55% | LR: 5.00e-07 | Time: 1041.2s
+2026-02-27 12:51:10 | INFO     | Epoch [27/30] | Train Loss: 0.4969 | Train Acc: 89.18% | Val Loss: 0.4201 | Val Acc: 91.40% | LR: 5.00e-08 | Time: 1039.3s
+2026-02-27 13:21:16 | INFO     | Epoch [28/30] | Train Loss: 0.4858 | Train Acc: 89.82% | Val Loss: 0.4181 | Val Acc: 91.17% | LR: 5.00e-08 | Time: 1806.4s
+2026-02-27 13:51:43 | INFO     | Epoch [29/30] | Train Loss: 0.4969 | Train Acc: 89.59% | Val Loss: 0.4165 | Val Acc: 91.47% | LR: 5.00e-08 | Time: 1826.7s
+2026-02-27 13:51:43 | INFO     | Early stopping triggered at epoch 29 (patience=7)
+2026-02-27 13:51:43 | INFO     | ============================================================
+2026-02-27 13:51:43 | INFO     | Training complete in 570.4 minutes
+2026-02-27 13:51:43 | INFO     | Best validation accuracy: 91.55%
+2026-02-27 13:51:43 | INFO     | ============================================================
+2026-02-27 13:51:44 | INFO     | Training history plot saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\plots\training_history.png
+2026-02-27 13:51:44 | INFO     | Metrics saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\metrics\training_history.json
+2026-02-27 13:51:44 | INFO     | ============================================================
+2026-02-27 13:51:44 | INFO     | PHASE: MODEL EVALUATION
+2026-02-27 13:51:44 | INFO     | ============================================================
+2026-02-27 13:51:44 | INFO     | Checkpoint loaded: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\checkpoints\best_model.pth (epoch 21, val_acc=91.5515)
+2026-02-27 13:51:44 | INFO     | Loaded best model from epoch 21 (val_acc=91.55%)
+2026-02-27 13:51:44 | INFO     | Running inference on test set...
+2026-02-27 13:53:09 | INFO     | ============================================================
+2026-02-27 13:53:09 | INFO     | TEST SET EVALUATION RESULTS
+2026-02-27 13:53:09 | INFO     | ============================================================
+2026-02-27 13:53:09 | INFO     | Test Accuracy       : 91.63%
+2026-02-27 13:53:09 | INFO     | Top-5 Accuracy      : 98.77%
+2026-02-27 13:53:09 | INFO     | Precision (macro)   : 90.41%
+2026-02-27 13:53:09 | INFO     | Recall (macro)      : 86.45%
+2026-02-27 13:53:09 | INFO     | F1-Score (macro)    : 87.37%
+2026-02-27 13:53:09 | INFO     | Precision (weighted): 91.84%
+2026-02-27 13:53:09 | INFO     | Recall (weighted)   : 91.63%
+2026-02-27 13:53:09 | INFO     | F1-Score (weighted) : 91.14%
+2026-02-27 13:53:09 | INFO     | ============================================================
+2026-02-27 13:53:09 | INFO     | Per-Class Classification Report:
+                 precision    recall  f1-score   support
+
+          Faces       0.92      1.00      0.96        66
+     Faces_easy       1.00      0.92      0.96        66
+       Leopards       0.88      1.00      0.94        30
+     Motorbikes       0.97      1.00      0.98       120
+      accordion       1.00      1.00      1.00         8
+      airplanes       0.96      1.00      0.98       120
+         anchor       0.75      0.50      0.60         6
+            ant       1.00      0.83      0.91         6
+         barrel       1.00      0.86      0.92         7
+           bass       0.71      0.62      0.67         8
+         beaver       0.80      0.57      0.67         7
+      binocular       1.00      0.80      0.89         5
+         bonsai       0.95      1.00      0.97        19
+          brain       0.93      0.93      0.93        15
+   brontosaurus       0.80      0.67      0.73         6
+         buddha       0.87      1.00      0.93        13
+      butterfly       0.87      0.93      0.90        14
+         camera       0.88      1.00      0.93         7
+         cannon       1.00      0.50      0.67         6
+       car_side       1.00      1.00      1.00        19
+    ceiling_fan       1.00      0.71      0.83         7
+      cellphone       0.78      0.78      0.78         9
+          chair       0.88      0.70      0.78        10
+     chandelier       0.87      0.81      0.84        16
+    cougar_body       1.00      0.86      0.92         7
+    cougar_face       1.00      0.90      0.95        10
+           crab       0.80      0.73      0.76        11
+       crayfish       0.86      0.60      0.71        10
+      crocodile       0.83      0.62      0.71         8
+ crocodile_head       0.86      0.86      0.86         7
+            cup       1.00      1.00      1.00         8
+      dalmatian       1.00      1.00      1.00        10
+    dollar_bill       1.00      1.00      1.00         8
+        dolphin       0.67      1.00      0.80        10
+      dragonfly       0.90      0.90      0.90        10
+electric_guitar       0.82      0.82      0.82        11
+       elephant       0.89      0.80      0.84        10
+            emu       0.86      0.75      0.80         8
+      euphonium       1.00      1.00      1.00         9
+           ewer       0.93      1.00      0.96        13
+          ferry       1.00      1.00      1.00        10
+       flamingo       0.83      1.00      0.91        10
+  flamingo_head       1.00      0.86      0.92         7
+       garfield       1.00      1.00      1.00         5
+        gerenuk       1.00      1.00      1.00         5
+     gramophone       1.00      0.75      0.86         8
+    grand_piano       0.94      1.00      0.97        15
+      hawksbill       0.83      1.00      0.91        15
+      headphone       1.00      0.71      0.83         7
+       hedgehog       1.00      1.00      1.00         8
+     helicopter       1.00      0.85      0.92        13
+           ibis       0.92      1.00      0.96        12
+   inline_skate       1.00      0.80      0.89         5
+    joshua_tree       0.90      1.00      0.95         9
+       kangaroo       0.81      1.00      0.90        13
+          ketch       0.79      0.88      0.83        17
+           lamp       0.90      1.00      0.95         9
+         laptop       1.00      1.00      1.00        12
+          llama       1.00      0.82      0.90        11
+        lobster       1.00      0.67      0.80         6
+          lotus       0.67      0.60      0.63        10
+       mandolin       0.83      0.83      0.83         6
+         mayfly       1.00      1.00      1.00         6
+        menorah       0.72      1.00      0.84        13
+      metronome       1.00      1.00      1.00         5
+        minaret       0.79      1.00      0.88        11
+       nautilus       0.90      1.00      0.95         9
+        octopus       0.50      0.40      0.44         5
+          okapi       0.83      0.83      0.83         6
+         pagoda       1.00      1.00      1.00         7
+          panda       1.00      1.00      1.00         6
+         pigeon       1.00      1.00      1.00         6
+          pizza       1.00      1.00      1.00         8
+       platypus       1.00      0.20      0.33         5
+        pyramid       1.00      0.88      0.93         8
+       revolver       0.85      0.85      0.85        13
+          rhino       0.90      1.00      0.95         9
+        rooster       0.88      0.88      0.88         8
+      saxophone       1.00      1.00      1.00         6
+       schooner       0.71      0.56      0.62         9
+       scissors       0.86      1.00      0.92         6
+       scorpion       0.76      1.00      0.87        13
+      sea_horse       1.00      0.75      0.86         8
+         snoopy       0.83      1.00      0.91         5
+    soccer_ball       1.00      0.89      0.94         9
+        stapler       0.78      1.00      0.88         7
+       starfish       1.00      1.00      1.00        13
+    stegosaurus       0.89      0.89      0.89         9
+      stop_sign       1.00      1.00      1.00        10
+     strawberry       1.00      1.00      1.00         5
+      sunflower       0.87      1.00      0.93        13
+           tick       0.88      1.00      0.93         7
+      trilobite       1.00      1.00      1.00        13
+       umbrella       0.92      1.00      0.96        11
+          watch       0.95      1.00      0.97        36
+    water_lilly       0.33      0.17      0.22         6
+     wheelchair       0.88      0.78      0.82         9
+       wild_cat       1.00      0.40      0.57         5
+  windsor_chair       1.00      0.89      0.94         9
+         wrench       0.67      0.33      0.44         6
+       yin_yang       1.00      0.89      0.94         9
+
+       accuracy                           0.92      1302
+      macro avg       0.90      0.86      0.87      1302
+   weighted avg       0.92      0.92      0.91      1302
+
+2026-02-27 13:53:11 | INFO     | Confusion matrix saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\plots\confusion_matrix.png
+2026-02-27 13:53:13 | INFO     | Sample predictions plot saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\plots\sample_predictions.png
+2026-02-27 13:53:13 | INFO     | Top 5 Best Performing Classes:
+2026-02-27 13:53:13 | INFO     |   watch: 100.00%
+2026-02-27 13:53:13 | INFO     |   umbrella: 100.00%
+2026-02-27 13:53:13 | INFO     |   trilobite: 100.00%
+2026-02-27 13:53:13 | INFO     |   tick: 100.00%
+2026-02-27 13:53:13 | INFO     |   sunflower: 100.00%
+2026-02-27 13:53:13 | INFO     | Top 5 Worst Performing Classes:
+2026-02-27 13:53:13 | INFO     |   water_lilly: 16.67%
+2026-02-27 13:53:13 | INFO     |   platypus: 20.00%
+2026-02-27 13:53:13 | INFO     |   wrench: 33.33%
+2026-02-27 13:53:13 | INFO     |   octopus: 40.00%
+2026-02-27 13:53:13 | INFO     |   wild_cat: 40.00%
+2026-02-27 13:53:13 | INFO     | Metrics saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\metrics\evaluation_metrics.json
+2026-02-27 13:53:13 | INFO     | ============================================================
+2026-02-27 13:53:13 | INFO     | Evaluation complete. All metrics and plots saved.
+2026-02-27 13:53:13 | INFO     | ============================================================
+2026-02-27 13:53:13 | INFO     | 
+============================================================
+2026-02-27 13:53:13 | INFO     | TECHNICAL SUMMARY
+2026-02-27 13:53:13 | INFO     | ============================================================
+2026-02-27 13:53:13 | INFO     | Dataset          : Caltech-101
+2026-02-27 13:53:13 | INFO     | Classes          : 101
+2026-02-27 13:53:13 | INFO     | Total samples    : 8677
+2026-02-27 13:53:13 | INFO     | Model            : ResNet18 (pretrained=yes)
+2026-02-27 13:53:13 | INFO     | Image size       : 224x224
+2026-02-27 13:53:13 | INFO     | Batch size       : 64
+2026-02-27 13:53:13 | INFO     | Max epochs       : 30
+2026-02-27 13:53:13 | INFO     | Learning rate    : 0.0005
+2026-02-27 13:53:13 | INFO     | Optimizer        : Adam (weight_decay=0.0001)
+2026-02-27 13:53:13 | INFO     | Scheduler        : step
+2026-02-27 13:53:13 | INFO     | Dropout          : 0.5
+2026-02-27 13:53:13 | INFO     | Device           : cpu
+2026-02-27 13:53:13 | INFO     | Test Accuracy    : 91.63%
+2026-02-27 13:53:13 | INFO     | Top-5 Accuracy   : 98.77%
+2026-02-27 13:53:13 | INFO     | F1 (macro)       : 87.37%
+2026-02-27 13:53:13 | INFO     | F1 (weighted)    : 91.14%
+2026-02-27 13:53:13 | INFO     | Total time       : 572.0 minutes
+2026-02-27 13:53:13 | INFO     | ============================================================
+2026-02-27 13:53:13 | INFO     | Technical summary saved: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs\technical_summary.txt
+2026-02-27 13:53:13 | INFO     | Pipeline complete. Total time: 572.0 minutes
+2026-02-27 13:53:13 | INFO     | Outputs saved to: C:\Users\Hafiz Abdul Rehman\Downloads\SE Final\caltech101_classification\outputs

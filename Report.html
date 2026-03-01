@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Caltech-101 Image Classification with ResNet18 — Complete Report</title>
+<style>
+  @page { size: A4; margin: 20mm 15mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: #1a1a2e;
+    background: #fff;
+    margin: 0; padding: 20px 30px;
+  }
+  h1 { font-size: 22pt; color: #0f3460; text-align: center; border-bottom: 3px solid #0f3460; padding-bottom: 10px; margin-top: 0; }
+  h2 { font-size: 16pt; color: #16213e; border-bottom: 2px solid #e94560; padding-bottom: 5px; margin-top: 30px; page-break-after: avoid; }
+  h3 { font-size: 13pt; color: #0f3460; margin-top: 20px; page-break-after: avoid; }
+  .subtitle { text-align: center; color: #555; font-size: 11pt; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10pt; }
+  th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; }
+  th { background: #0f3460; color: white; font-weight: 600; }
+  tr:nth-child(even) { background: #f4f4f8; }
+  pre {
+    background: #1a1a2e; color: #e0e0e0; padding: 12px 15px;
+    border-radius: 6px; font-size: 9pt; line-height: 1.4;
+    overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;
+    page-break-inside: avoid;
+  }
+  .keyword { color: #e94560; }
+  .string { color: #4ecca3; }
+  .comment { color: #888; font-style: italic; }
+  .number { color: #f9a825; }
+  .decorator { color: #bb86fc; }
+  .img-container { text-align: center; margin: 15px 0; page-break-inside: avoid; }
+  .img-container img { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; }
+  .img-caption { font-size: 9pt; color: #666; margin-top: 4px; font-style: italic; }
+  .metric-box { display: inline-block; width: 23%; text-align: center; background: #f0f4ff; border: 2px solid #0f3460; border-radius: 8px; padding: 12px 8px; margin: 5px 0.5%; vertical-align: top; }
+  .metric-box .value { font-size: 20pt; font-weight: bold; color: #e94560; }
+  .metric-box .label { font-size: 9pt; color: #555; }
+  .highlight { background: #fff3cd; padding: 8px 12px; border-left: 4px solid #ffc107; margin: 10px 0; border-radius: 4px; font-size: 10pt; }
+  .success { background: #d4edda; border-left-color: #28a745; }
+  .phase-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 8pt; font-weight: bold; color: #fff; }
+  .phase1 { background: #e94560; }
+  .phase2 { background: #0f3460; }
+  .footer { text-align: center; font-size: 9pt; color: #888; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px; }
+  .toc { background: #f0f4ff; padding: 15px 25px; border-radius: 8px; margin: 15px 0; }
+  .toc ol { margin: 5px 0; }
+  .toc li { margin: 3px 0; }
+  .toc a { color: #0f3460; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<h1>Caltech-101 Image Classification with ResNet18</h1>
+<p class="subtitle">Complete Training, Validation & Testing Report<br>
+Date: February 27, 2026 &nbsp;|&nbsp; Device: CPU &nbsp;|&nbsp; Total Training Time: 572 minutes (~9.5 hours)</p>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+<strong>Table of Contents</strong>
+<ol>
+  <li><a href="#overview">Project Overview</a></li>
+  <li><a href="#structure">Project Structure</a></li>
+  <li><a href="#dataset">Dataset Analysis</a></li>
+  <li><a href="#model">Model Architecture</a></li>
+  <li><a href="#training">Training Results</a></li>
+  <li><a href="#evaluation">Evaluation & Testing Results</a></li>
+  <li><a href="#visualizations">Visualizations</a></li>
+  <li><a href="#code">Source Code</a></li>
+  <li><a href="#conclusion">Conclusion</a></li>
+</ol>
+</div>
+
+<!-- 1. PROJECT OVERVIEW -->
+<h2 id="overview">1. Project Overview</h2>
+<p>This project implements a complete deep learning pipeline for image classification on the <strong>Caltech-101</strong> dataset using a fine-tuned <strong>ResNet18</strong> model built in PyTorch. The pipeline covers dataset analysis, stratified splitting, data augmentation, two-phase training with transfer learning, and comprehensive evaluation.</p>
+
+<div style="text-align:center; margin: 10px 0;">
+  <div class="metric-box"><div class="value">91.63%</div><div class="label">Test Accuracy</div></div>
+  <div class="metric-box"><div class="value">98.77%</div><div class="label">Top-5 Accuracy</div></div>
+  <div class="metric-box"><div class="value">87.37%</div><div class="label">F1 (Macro)</div></div>
+  <div class="metric-box"><div class="value">91.14%</div><div class="label">F1 (Weighted)</div></div>
+</div>
+
+<!-- 2. PROJECT STRUCTURE -->
+<h2 id="structure">2. Project Structure</h2>
+<pre>
+caltech101_classification/
+├── config.py          # Centralized configuration &amp; hyperparameters
+├── dataset.py         # Dataset loading, splitting, augmentation
+├── model.py           # ResNet18 model architecture &amp; fine-tuning
+├── train.py           # Training loop with validation &amp; early stopping
+├── evaluate.py        # Evaluation metrics &amp; visualization
+├── utils.py           # Utilities (logging, plotting, checkpointing)
+├── main.py            # Main entry point (CLI)
+├── requirements.txt   # Python dependencies
+├── Caltech101_Dataset/
+│   └── caltech-101/   # 101 object categories (8677 images)
+└── outputs/
+    ├── checkpoints/best_model.pth      # Best model checkpoint (43 MB)
+    ├── plots/training_history.png       # Training curves
+    ├── plots/confusion_matrix.png       # Confusion matrix
+    ├── plots/sample_predictions.png     # Sample predictions
+    ├── plots/class_distribution.png     # Class distribution
+    ├── metrics/evaluation_metrics.json  # All test metrics
+    ├── metrics/dataset_analysis.json    # Dataset statistics
+    ├── metrics/training_history.json    # Training summary
+    ├── technical_summary.txt            # Human-readable summary
+    └── training.log                     # Full training log
+</pre>
+
+<!-- 3. DATASET ANALYSIS -->
+<h2 id="dataset">3. Dataset Analysis</h2>
+
+<table>
+  <tr><th>Property</th><th>Value</th></tr>
+  <tr><td>Dataset</td><td>Caltech-101</td></tr>
+  <tr><td>Total Samples</td><td>8,677 images</td></tr>
+  <tr><td>Number of Classes</td><td>101 (excluding BACKGROUND_Google)</td></tr>
+  <tr><td>Min Samples/Class</td><td>31</td></tr>
+  <tr><td>Max Samples/Class</td><td>800</td></tr>
+  <tr><td>Mean Samples/Class</td><td>85.9</td></tr>
+  <tr><td>Median Samples/Class</td><td>59.0</td></tr>
+  <tr><td>Std Dev</td><td>117.8</td></tr>
+  <tr><td>Overrepresented Classes</td><td>Faces, Faces_easy, Motorbikes, airplanes</td></tr>
+</table>
+
+<h3>Data Split (Stratified)</h3>
+<table>
+  <tr><th>Split</th><th>Samples</th><th>Percentage</th></tr>
+  <tr><td>Training</td><td>6,073</td><td>70%</td></tr>
+  <tr><td>Validation</td><td>1,302</td><td>15%</td></tr>
+  <tr><td>Test</td><td>1,302</td><td>15%</td></tr>
+</table>
+
+<div class="img-container">
+  <img src="outputs/plots/class_distribution.png" alt="Class Distribution">
+  <div class="img-caption">Figure 1: Caltech-101 Class Distribution (101 classes, 8677 samples)</div>
+</div>
+
+<!-- 4. MODEL ARCHITECTURE -->
+<h2 id="model">4. Model Architecture</h2>
+
+<table>
+  <tr><th>Component</th><th>Details</th></tr>
+  <tr><td>Base Model</td><td>ResNet18 (pretrained on ImageNet)</td></tr>
+  <tr><td>Total Parameters</td><td>11,228,325</td></tr>
+  <tr><td>Input Size</td><td>224 × 224 × 3</td></tr>
+  <tr><td>Modification</td><td>Dropout (0.5) + Linear FC layer (512 → 101)</td></tr>
+  <tr><td>Normalization</td><td>ImageNet (mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])</td></tr>
+</table>
+
+<h3>Training Strategy</h3>
+<table>
+  <tr><th>Parameter</th><th>Value</th></tr>
+  <tr><td>Optimizer</td><td>Adam (weight_decay=1e-4)</td></tr>
+  <tr><td>Learning Rate</td><td>5e-4 (initial)</td></tr>
+  <tr><td>Scheduler</td><td>StepLR (step_size=7, gamma=0.1)</td></tr>
+  <tr><td>Batch Size</td><td>64</td></tr>
+  <tr><td>Max Epochs</td><td>30</td></tr>
+  <tr><td>Phase 1 (Epochs 1–5)</td><td>Backbone frozen, only FC head trains (51,813 / 11.2M params = 0.46%)</td></tr>
+  <tr><td>Phase 2 (Epochs 6–30)</td><td>Full fine-tuning, differential LR (backbone: 0.1× head LR)</td></tr>
+  <tr><td>Early Stopping</td><td>Patience = 7, min_delta = 1e-4</td></tr>
+  <tr><td>Dropout</td><td>0.5</td></tr>
+</table>
+
+<h3>Data Augmentation (Training Only)</h3>
+<table>
+  <tr><th>Transform</th><th>Parameters</th></tr>
+  <tr><td>Resize</td><td>256 × 256</td></tr>
+  <tr><td>RandomResizedCrop</td><td>224 × 224, scale=(0.8, 1.0)</td></tr>
+  <tr><td>RandomHorizontalFlip</td><td>p=0.5</td></tr>
+  <tr><td>RandomRotation</td><td>±15°</td></tr>
+  <tr><td>ColorJitter</td><td>brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1</td></tr>
+  <tr><td>Normalize</td><td>ImageNet statistics</td></tr>
+</table>
+
+<!-- 5. TRAINING RESULTS -->
+<h2 id="training">5. Training Results</h2>
+
+<div class="highlight success">
+  <strong>✅ Training completed successfully!</strong> Early stopping triggered at epoch 29 (patience=7). 
+  Best model saved at epoch 21 with validation accuracy of <strong>91.55%</strong>. 
+  Total training time: <strong>570.4 minutes (~9.5 hours)</strong> on CPU.
+</div>
+
+<h3>Epoch-by-Epoch Training Log</h3>
+<table>
+  <tr><th>Epoch</th><th>Phase</th><th>Train Loss</th><th>Train Acc</th><th>Val Loss</th><th>Val Acc</th><th>LR</th><th>Time</th><th>Best?</th></tr>
+  <tr><td>1</td><td><span class="phase-badge phase1">Phase 1</span></td><td>3.8345</td><td>21.21%</td><td>2.6406</td><td>42.09%</td><td>5.00e-04</td><td>566s</td><td>★</td></tr>
+  <tr><td>2</td><td><span class="phase-badge phase1">Phase 1</span></td><td>2.5694</td><td>43.45%</td><td>1.7859</td><td>63.90%</td><td>5.00e-04</td><td>505s</td><td>★</td></tr>
+  <tr><td>3</td><td><span class="phase-badge phase1">Phase 1</span></td><td>1.9408</td><td>58.13%</td><td>1.3253</td><td>73.73%</td><td>5.00e-04</td><td>524s</td><td>★</td></tr>
+  <tr><td>4</td><td><span class="phase-badge phase1">Phase 1</span></td><td>1.5840</td><td>65.01%</td><td>1.0552</td><td>78.34%</td><td>5.00e-04</td><td>495s</td><td>★</td></tr>
+  <tr><td>5</td><td><span class="phase-badge phase1">Phase 1</span></td><td>1.3548</td><td>69.69%</td><td>0.8974</td><td>81.49%</td><td>5.00e-04</td><td>591s</td><td>★</td></tr>
+  <tr><td>6</td><td><span class="phase-badge phase2">Phase 2</span></td><td>1.0999</td><td>75.99%</td><td>0.7456</td><td>84.64%</td><td>5.00e-05</td><td>976s</td><td>★</td></tr>
+  <tr><td>7</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.9042</td><td>80.32%</td><td>0.6677</td><td>86.48%</td><td>5.00e-05</td><td>1992s</td><td>★</td></tr>
+  <tr><td>8</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.8209</td><td>82.84%</td><td>0.5952</td><td>88.71%</td><td>5.00e-05</td><td>964s</td><td>★</td></tr>
+  <tr><td>9</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.7225</td><td>84.26%</td><td>0.5476</td><td>89.48%</td><td>5.00e-05</td><td>964s</td><td>★</td></tr>
+  <tr><td>10</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.6506</td><td>86.55%</td><td>0.4973</td><td>90.48%</td><td>5.00e-05</td><td>965s</td><td>★</td></tr>
+  <tr><td>11</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.6024</td><td>87.21%</td><td>0.4640</td><td>90.78%</td><td>5.00e-05</td><td>959s</td><td>★</td></tr>
+  <tr><td>12</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5659</td><td>87.78%</td><td>0.4405</td><td>91.17%</td><td>5.00e-05</td><td>962s</td><td>★</td></tr>
+  <tr><td>13</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5284</td><td>88.92%</td><td>0.4343</td><td>90.94%</td><td>5.00e-06</td><td>968s</td><td></td></tr>
+  <tr><td>14</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5311</td><td>88.69%</td><td>0.4304</td><td>91.09%</td><td>5.00e-06</td><td>1013s</td><td></td></tr>
+  <tr><td>15</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5158</td><td>89.13%</td><td>0.4356</td><td>91.24%</td><td>5.00e-06</td><td>1399s</td><td>★</td></tr>
+  <tr><td>16</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5239</td><td>88.70%</td><td>0.4326</td><td>91.40%</td><td>5.00e-06</td><td>1576s</td><td>★</td></tr>
+  <tr><td>17</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5039</td><td>89.20%</td><td>0.4263</td><td>91.32%</td><td>5.00e-06</td><td>3142s</td><td></td></tr>
+  <tr><td>18</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5075</td><td>89.17%</td><td>0.4256</td><td>91.47%</td><td>5.00e-06</td><td>1053s</td><td>★</td></tr>
+  <tr><td>19</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5006</td><td>89.35%</td><td>0.4170</td><td>91.40%</td><td>5.00e-06</td><td>1028s</td><td></td></tr>
+  <tr><td>20</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5139</td><td>89.03%</td><td>0.4170</td><td>91.40%</td><td>5.00e-07</td><td>1000s</td><td></td></tr>
+  <tr style="background:#d4edda;"><td><strong>21</strong></td><td><span class="phase-badge phase2">Phase 2</span></td><td><strong>0.5071</strong></td><td><strong>88.80%</strong></td><td><strong>0.4214</strong></td><td><strong>91.55%</strong></td><td>5.00e-07</td><td>1041s</td><td><strong>★ BEST</strong></td></tr>
+  <tr><td>22</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.4915</td><td>89.81%</td><td>0.4153</td><td>91.24%</td><td>5.00e-07</td><td>1430s</td><td></td></tr>
+  <tr><td>23</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.4895</td><td>89.79%</td><td>0.4172</td><td>91.47%</td><td>5.00e-07</td><td>1317s</td><td></td></tr>
+  <tr><td>24</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.4989</td><td>89.31%</td><td>0.4162</td><td>91.24%</td><td>5.00e-07</td><td>1359s</td><td></td></tr>
+  <tr><td>25</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.5057</td><td>89.30%</td><td>0.4181</td><td>91.47%</td><td>5.00e-07</td><td>1722s</td><td></td></tr>
+  <tr><td>26</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.4908</td><td>89.61%</td><td>0.4184</td><td>91.55%</td><td>5.00e-07</td><td>1041s</td><td></td></tr>
+  <tr><td>27</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.4969</td><td>89.18%</td><td>0.4201</td><td>91.40%</td><td>5.00e-08</td><td>1039s</td><td></td></tr>
+  <tr><td>28</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.4858</td><td>89.82%</td><td>0.4181</td><td>91.17%</td><td>5.00e-08</td><td>1806s</td><td></td></tr>
+  <tr><td>29</td><td><span class="phase-badge phase2">Phase 2</span></td><td>0.4969</td><td>89.59%</td><td>0.4165</td><td>91.47%</td><td>5.00e-08</td><td>1827s</td><td>Early Stop</td></tr>
+</table>
+
+<div class="img-container">
+  <img src="outputs/plots/training_history.png" alt="Training History">
+  <div class="img-caption">Figure 2: Training &amp; Validation Loss and Accuracy Curves over 29 Epochs</div>
+</div>
+
+<!-- 6. EVALUATION RESULTS -->
+<h2 id="evaluation">6. Evaluation &amp; Testing Results</h2>
+
+<p>The best model (epoch 21, val_acc=91.55%) was loaded and evaluated on the <strong>held-out test set (1,302 samples)</strong>.</p>
+
+<h3>Overall Metrics</h3>
+<table>
+  <tr><th>Metric</th><th>Value</th></tr>
+  <tr><td>Test Accuracy</td><td><strong>91.63%</strong></td></tr>
+  <tr><td>Top-5 Accuracy</td><td><strong>98.77%</strong></td></tr>
+  <tr><td>Precision (macro)</td><td>90.41%</td></tr>
+  <tr><td>Recall (macro)</td><td>86.45%</td></tr>
+  <tr><td>F1-Score (macro)</td><td>87.37%</td></tr>
+  <tr><td>Precision (weighted)</td><td>91.84%</td></tr>
+  <tr><td>Recall (weighted)</td><td>91.63%</td></tr>
+  <tr><td>F1-Score (weighted)</td><td>91.14%</td></tr>
+  <tr><td>Total Test Samples</td><td>1,302</td></tr>
+  <tr><td>Number of Classes</td><td>101</td></tr>
+</table>
+
+<h3>Top 5 Best Performing Classes (100% Accuracy)</h3>
+<table>
+  <tr><th>Class</th><th>Accuracy</th><th>Samples</th></tr>
+  <tr><td>accordion, airplanes, bonsai, buddha, camera, car_side, cup, dalmatian, dollar_bill, dolphin, euphonium, ewer, ferry, flamingo, garfield, gerenuk, grand_piano, hawksbill, hedgehog, ibis, joshua_tree, kangaroo, lamp, laptop, mayfly, menorah, metronome, minaret, Motorbikes, nautilus, pagoda, panda, pigeon, pizza, rhino, saxophone, scissors, scorpion, snoopy, starfish, stop_sign, strawberry, sunflower, tick, trilobite, umbrella, watch, Faces, Leopards, stapler</td><td>100.00%</td><td>Various</td></tr>
+</table>
+
+<h3>Top 5 Worst Performing Classes</h3>
+<table>
+  <tr><th>Class</th><th>Accuracy</th><th>Test Samples</th></tr>
+  <tr><td>water_lilly</td><td>16.67%</td><td>6</td></tr>
+  <tr><td>platypus</td><td>20.00%</td><td>5</td></tr>
+  <tr><td>wrench</td><td>33.33%</td><td>6</td></tr>
+  <tr><td>octopus</td><td>40.00%</td><td>5</td></tr>
+  <tr><td>wild_cat</td><td>40.00%</td><td>5</td></tr>
+</table>
+<p><em>Note: Worst-performing classes have very few test samples (5–6), which makes accuracy less stable.</em></p>
+
+<h3>Per-Class Classification Report</h3>
+<pre>
+                 precision    recall  f1-score   support
+
+          Faces       0.92      1.00      0.96        66
+     Faces_easy       1.00      0.92      0.96        66
+       Leopards       0.88      1.00      0.94        30
+     Motorbikes       0.97      1.00      0.98       120
+      accordion       1.00      1.00      1.00         8
+      airplanes       0.96      1.00      0.98       120
+         anchor       0.75      0.50      0.60         6
+            ant       1.00      0.83      0.91         6
+         barrel       1.00      0.86      0.92         7
+           bass       0.71      0.62      0.67         8
+         beaver       0.80      0.57      0.67         7
+      binocular       1.00      0.80      0.89         5
+         bonsai       0.95      1.00      0.97        19
+          brain       0.93      0.93      0.93        15
+   brontosaurus       0.80      0.67      0.73         6
+         buddha       0.87      1.00      0.93        13
+      butterfly       0.87      0.93      0.90        14
+         camera       0.88      1.00      0.93         7
+         cannon       1.00      0.50      0.67         6
+       car_side       1.00      1.00      1.00        19
+    ceiling_fan       1.00      0.71      0.83         7
+      cellphone       0.78      0.78      0.78         9
+          chair       0.88      0.70      0.78        10
+     chandelier       0.87      0.81      0.84        16
+    cougar_body       1.00      0.86      0.92         7
+    cougar_face       1.00      0.90      0.95        10
+           crab       0.80      0.73      0.76        11
+       crayfish       0.86      0.60      0.71        10
+      crocodile       0.83      0.62      0.71         8
+ crocodile_head       0.86      0.86      0.86         7
+            cup       1.00      1.00      1.00         8
+      dalmatian       1.00      1.00      1.00        10
+    dollar_bill       1.00      1.00      1.00         8
+        dolphin       0.67      1.00      0.80        10
+      dragonfly       0.90      0.90      0.90        10
+electric_guitar       0.82      0.82      0.82        11
+       elephant       0.89      0.80      0.84        10
+            emu       0.86      0.75      0.80         8
+      euphonium       1.00      1.00      1.00         9
+           ewer       0.93      1.00      0.96        13
+          ferry       1.00      1.00      1.00        10
+       flamingo       0.83      1.00      0.91        10
+  flamingo_head       1.00      0.86      0.92         7
+       garfield       1.00      1.00      1.00         5
+        gerenuk       1.00      1.00      1.00         5
+     gramophone       1.00      0.75      0.86         8
+    grand_piano       0.94      1.00      0.97        15
+      hawksbill       0.83      1.00      0.91        15
+      headphone       1.00      0.71      0.83         7
+       hedgehog       1.00      1.00      1.00         8
+     helicopter       1.00      0.85      0.92        13
+           ibis       0.92      1.00      0.96        12
+   inline_skate       1.00      0.80      0.89         5
+    joshua_tree       0.90      1.00      0.95         9
+       kangaroo       0.81      1.00      0.90        13
+          ketch       0.79      0.88      0.83        17
+           lamp       0.90      1.00      0.95         9
+         laptop       1.00      1.00      1.00        12
+          llama       1.00      0.82      0.90        11
+        lobster       1.00      0.67      0.80         6
+          lotus       0.67      0.60      0.63        10
+       mandolin       0.83      0.83      0.83         6
+         mayfly       1.00      1.00      1.00         6
+        menorah       0.72      1.00      0.84        13
+      metronome       1.00      1.00      1.00         5
+        minaret       0.79      1.00      0.88        11
+       nautilus       0.90      1.00      0.95         9
+        octopus       0.50      0.40      0.44         5
+          okapi       0.83      0.83      0.83         6
+         pagoda       1.00      1.00      1.00         7
+          panda       1.00      1.00      1.00         6
+         pigeon       1.00      1.00      1.00         6
+          pizza       1.00      1.00      1.00         8
+       platypus       1.00      0.20      0.33         5
+        pyramid       1.00      0.88      0.93         8
+       revolver       0.85      0.85      0.85        13
+          rhino       0.90      1.00      0.95         9
+        rooster       0.88      0.88      0.88         8
+      saxophone       1.00      1.00      1.00         6
+       schooner       0.71      0.56      0.62         9
+       scissors       0.86      1.00      0.92         6
+       scorpion       0.76      1.00      0.87        13
+      sea_horse       1.00      0.75      0.86         8
+         snoopy       0.83      1.00      0.91         5
+    soccer_ball       1.00      0.89      0.94         9
+        stapler       0.78      1.00      0.88         7
+       starfish       1.00      1.00      1.00        13
+    stegosaurus       0.89      0.89      0.89         9
+      stop_sign       1.00      1.00      1.00        10
+     strawberry       1.00      1.00      1.00         5
+      sunflower       0.87      1.00      0.93        13
+           tick       0.88      1.00      0.93         7
+      trilobite       1.00      1.00      1.00        13
+       umbrella       0.92      1.00      0.96        11
+          watch       0.95      1.00      0.97        36
+    water_lilly       0.33      0.17      0.22         6
+     wheelchair       0.88      0.78      0.82         9
+       wild_cat       1.00      0.40      0.57         5
+  windsor_chair       1.00      0.89      0.94         9
+         wrench       0.67      0.33      0.44         6
+       yin_yang       1.00      0.89      0.94         9
+
+       accuracy                           0.92      1302
+      macro avg       0.90      0.86      0.87      1302
+   weighted avg       0.92      0.92      0.91      1302
+</pre>
+
+<!-- 7. VISUALIZATIONS -->
+<h2 id="visualizations">7. Visualizations</h2>
+
+<div class="img-container">
+  <img src="outputs/plots/confusion_matrix.png" alt="Confusion Matrix">
+  <div class="img-caption">Figure 3: Confusion Matrix Heatmap (Top 20 classes by sample count)</div>
+</div>
+
+<div class="img-container">
+  <img src="outputs/plots/sample_predictions.png" alt="Sample Predictions">
+  <div class="img-caption">Figure 4: Sample Test Predictions (Green = Correct, Red = Incorrect)</div>
+</div>
+
+<!-- 8. SOURCE CODE -->
+<h2 id="code">8. Source Code</h2>
+
+<h3>8.1 config.py — Configuration &amp; Hyperparameters</h3>
+<pre>
+<span class="comment">"""
+Configuration module for Caltech-101 Image Classification with ResNet18.
+Centralizes all hyperparameters, paths, and settings for reproducibility.
+"""</span>
+
+<span class="keyword">import</span> os
+<span class="keyword">import</span> torch
+
+<span class="comment"># Paths</span>
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(PROJECT_ROOT, <span class="string">"Caltech101_Dataset"</span>, <span class="string">"caltech-101"</span>)
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, <span class="string">"outputs"</span>)
+CHECKPOINT_DIR = os.path.join(OUTPUT_DIR, <span class="string">"checkpoints"</span>)
+PLOTS_DIR = os.path.join(OUTPUT_DIR, <span class="string">"plots"</span>)
+METRICS_DIR = os.path.join(OUTPUT_DIR, <span class="string">"metrics"</span>)
+
+<span class="comment"># Dataset Settings</span>
+IMAGE_SIZE = <span class="number">224</span>
+NUM_WORKERS = <span class="number">0</span>
+PIN_MEMORY = <span class="keyword">True</span>
+EXCLUDE_BACKGROUND = <span class="keyword">True</span>
+MIN_SAMPLES_PER_CLASS = <span class="number">20</span>
+
+<span class="comment"># Data Split Ratios</span>
+TRAIN_RATIO = <span class="number">0.70</span>
+VAL_RATIO = <span class="number">0.15</span>
+TEST_RATIO = <span class="number">0.15</span>
+
+<span class="comment"># Training Hyperparameters</span>
+BATCH_SIZE = <span class="number">32</span>
+NUM_EPOCHS = <span class="number">25</span>
+LEARNING_RATE = <span class="number">1e-3</span>
+WEIGHT_DECAY = <span class="number">1e-4</span>
+STEP_SIZE = <span class="number">7</span>
+GAMMA = <span class="number">0.1</span>
+SCHEDULER_TYPE = <span class="string">"step"</span>
+
+<span class="comment"># Fine-Tuning Strategy</span>
+FREEZE_BACKBONE_EPOCHS = <span class="number">5</span>
+UNFREEZE_LR_FACTOR = <span class="number">0.1</span>
+
+<span class="comment"># Early Stopping</span>
+EARLY_STOPPING_PATIENCE = <span class="number">7</span>
+EARLY_STOPPING_MIN_DELTA = <span class="number">1e-4</span>
+
+<span class="comment"># Model Settings</span>
+MODEL_NAME = <span class="string">"resnet18"</span>
+PRETRAINED = <span class="keyword">True</span>
+DROPOUT_RATE = <span class="number">0.5</span>
+
+<span class="comment"># Normalization (ImageNet stats)</span>
+IMAGENET_MEAN = [<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>]
+IMAGENET_STD = [<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>]
+
+<span class="comment"># Device</span>
+DEVICE = torch.device(<span class="string">"cuda"</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">"cpu"</span>)
+RANDOM_SEED = <span class="number">42</span>
+</pre>
+
+<h3>8.2 model.py — ResNet18 Architecture</h3>
+<pre>
+<span class="comment">"""Model module for Caltech-101 image classification."""</span>
+
+<span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">from</span> torchvision <span class="keyword">import</span> models
+<span class="keyword">import</span> config
+
+<span class="keyword">def</span> <span class="string">build_resnet18</span>(num_classes, pretrained=config.PRETRAINED):
+    <span class="comment">"""Build a ResNet18 model for image classification."""</span>
+    <span class="keyword">if</span> pretrained:
+        weights = models.ResNet18_Weights.IMAGENET1K_V1
+        model = models.resnet18(weights=weights)
+    <span class="keyword">else</span>:
+        model = models.resnet18(weights=<span class="keyword">None</span>)
+
+    in_features = model.fc.in_features
+    model.fc = nn.Sequential(
+        nn.Dropout(p=config.DROPOUT_RATE),
+        nn.Linear(in_features, num_classes),
+    )
+    model = model.to(config.DEVICE)
+    <span class="keyword">return</span> model
+
+<span class="keyword">def</span> <span class="string">freeze_backbone</span>(model):
+    <span class="comment">"""Freeze all layers except the final FC head."""</span>
+    <span class="keyword">for</span> name, param <span class="keyword">in</span> model.named_parameters():
+        <span class="keyword">if</span> <span class="string">"fc"</span> <span class="keyword">not in</span> name:
+            param.requires_grad = <span class="keyword">False</span>
+
+<span class="keyword">def</span> <span class="string">unfreeze_backbone</span>(model):
+    <span class="comment">"""Unfreeze all layers for full fine-tuning."""</span>
+    <span class="keyword">for</span> param <span class="keyword">in</span> model.parameters():
+        param.requires_grad = <span class="keyword">True</span>
+
+<span class="keyword">def</span> <span class="string">get_optimizer</span>(model, lr=config.LEARNING_RATE):
+    <span class="comment">"""Create Adam optimizer with differential LR."""</span>
+    backbone_params, head_params = [], []
+    <span class="keyword">for</span> name, param <span class="keyword">in</span> model.named_parameters():
+        <span class="keyword">if not</span> param.requires_grad: <span class="keyword">continue</span>
+        (<span class="keyword">head_params if</span> <span class="string">"fc"</span> <span class="keyword">in</span> name <span class="keyword">else</span> backbone_params).append(param)
+    <span class="keyword">if</span> backbone_params:
+        param_groups = [
+            {<span class="string">"params"</span>: backbone_params, <span class="string">"lr"</span>: lr * config.UNFREEZE_LR_FACTOR},
+            {<span class="string">"params"</span>: head_params, <span class="string">"lr"</span>: lr},
+        ]
+    <span class="keyword">else</span>:
+        param_groups = [{<span class="string">"params"</span>: head_params, <span class="string">"lr"</span>: lr}]
+    <span class="keyword">return</span> torch.optim.Adam(param_groups, weight_decay=config.WEIGHT_DECAY)
+</pre>
+
+<h3>8.3 train.py — Training Loop</h3>
+<pre>
+<span class="comment">"""Training module with validation, early stopping, and history tracking."""</span>
+
+<span class="keyword">import</span> time
+<span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm
+<span class="keyword">import</span> config
+
+<span class="keyword">def</span> <span class="string">train_one_epoch</span>(model, dataloader, criterion, optimizer, device):
+    <span class="comment">"""Train model for one epoch. Returns (avg_loss, accuracy)."""</span>
+    model.train()
+    running_loss, correct, total = <span class="number">0.0</span>, <span class="number">0</span>, <span class="number">0</span>
+    pbar = tqdm(dataloader, desc=<span class="string">"Training"</span>, leave=<span class="keyword">False</span>)
+    <span class="keyword">for</span> images, labels <span class="keyword">in</span> pbar:
+        images = images.to(device, non_blocking=<span class="keyword">True</span>)
+        labels = labels.to(device, non_blocking=<span class="keyword">True</span>)
+        optimizer.zero_grad()
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+        running_loss += loss.item() * images.size(<span class="number">0</span>)
+        _, predicted = outputs.max(<span class="number">1</span>)
+        correct += predicted.eq(labels).sum().item()
+        total += labels.size(<span class="number">0</span>)
+        pbar.set_postfix(loss=f<span class="string">"{loss.item():.4f}"</span>, acc=f<span class="string">"{100.0*correct/total:.2f}%"</span>)
+    <span class="keyword">return</span> running_loss / total, <span class="number">100.0</span> * correct / total
+
+<span class="decorator">@torch.no_grad()</span>
+<span class="keyword">def</span> <span class="string">validate</span>(model, dataloader, criterion, device):
+    <span class="comment">"""Validate model. Returns (avg_loss, accuracy)."""</span>
+    model.eval()
+    running_loss, correct, total = <span class="number">0.0</span>, <span class="number">0</span>, <span class="number">0</span>
+    <span class="keyword">for</span> images, labels <span class="keyword">in</span> tqdm(dataloader, desc=<span class="string">"Validating"</span>, leave=<span class="keyword">False</span>):
+        images = images.to(device, non_blocking=<span class="keyword">True</span>)
+        labels = labels.to(device, non_blocking=<span class="keyword">True</span>)
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+        running_loss += loss.item() * images.size(<span class="number">0</span>)
+        _, predicted = outputs.max(<span class="number">1</span>)
+        correct += predicted.eq(labels).sum().item()
+        total += labels.size(<span class="number">0</span>)
+    <span class="keyword">return</span> running_loss / total, <span class="number">100.0</span> * correct / total
+
+<span class="keyword">def</span> <span class="string">train_model</span>(model, train_loader, val_loader, num_epochs=config.NUM_EPOCHS):
+    <span class="comment">"""Full training pipeline with Phase 1 (frozen) → Phase 2 (fine-tune)."""</span>
+    criterion = nn.CrossEntropyLoss()
+    <span class="comment"># Phase 1: Freeze backbone, train head only</span>
+    freeze_backbone(model)
+    optimizer = get_optimizer(model, lr=config.LEARNING_RATE)
+    scheduler = get_scheduler(optimizer)
+    early_stopping = EarlyStopping()
+    history = {<span class="string">"train_loss"</span>: [], <span class="string">"train_acc"</span>: [], <span class="string">"val_loss"</span>: [], <span class="string">"val_acc"</span>: [], <span class="string">"lr"</span>: []}
+
+    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">1</span>, num_epochs + <span class="number">1</span>):
+        <span class="comment"># Phase 2: Unfreeze backbone after initial epochs</span>
+        <span class="keyword">if</span> epoch == config.FREEZE_BACKBONE_EPOCHS + <span class="number">1</span>:
+            unfreeze_backbone(model)
+            optimizer = get_optimizer(model, lr=config.LEARNING_RATE * config.UNFREEZE_LR_FACTOR)
+            scheduler = get_scheduler(optimizer)
+
+        train_loss, train_acc = train_one_epoch(model, train_loader, criterion, optimizer, config.DEVICE)
+        val_loss, val_acc = validate(model, val_loader, criterion, config.DEVICE)
+        scheduler.step()
+
+        <span class="comment"># Save best model &amp; check early stopping</span>
+        <span class="keyword">if</span> val_acc > best_val_acc:
+            save_checkpoint(model, optimizer, epoch, val_loss, val_acc)
+        <span class="keyword">if</span> early_stopping(val_loss):
+            <span class="keyword">break</span>
+    <span class="keyword">return</span> history
+</pre>
+
+<h3>8.4 dataset.py — Dataset &amp; DataLoaders</h3>
+<pre>
+<span class="comment">"""Dataset module: loading, splitting, augmentation, DataLoader creation."""</span>
+
+<span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> Dataset, DataLoader, Subset
+<span class="keyword">from</span> torchvision <span class="keyword">import</span> transforms
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+
+<span class="keyword">class</span> <span class="string">Caltech101Dataset</span>(Dataset):
+    <span class="comment">"""Custom PyTorch Dataset for Caltech-101."""</span>
+    <span class="keyword">def</span> __init__(self, data_dir, transform=<span class="keyword">None</span>, exclude_background=<span class="keyword">True</span>, min_samples=<span class="number">20</span>):
+        self.samples = []  <span class="comment"># (image_path, label_index)</span>
+        self.class_names = []
+        self._load_dataset(exclude_background, min_samples)
+
+    <span class="keyword">def</span> __getitem__(self, index):
+        img_path, label = self.samples[index]
+        image = Image.open(img_path).convert(<span class="string">"RGB"</span>)
+        <span class="keyword">if</span> self.transform: image = self.transform(image)
+        <span class="keyword">return</span> image, label
+
+<span class="keyword">def</span> <span class="string">get_train_transforms</span>():
+    <span class="comment">"""Training transforms with data augmentation."""</span>
+    <span class="keyword">return</span> transforms.Compose([
+        transforms.Resize((<span class="number">256</span>, <span class="number">256</span>)),
+        transforms.RandomResizedCrop(<span class="number">224</span>, scale=(<span class="number">0.8</span>, <span class="number">1.0</span>)),
+        transforms.RandomHorizontalFlip(p=<span class="number">0.5</span>),
+        transforms.RandomRotation(degrees=<span class="number">15</span>),
+        transforms.ColorJitter(brightness=<span class="number">0.2</span>, contrast=<span class="number">0.2</span>, saturation=<span class="number">0.2</span>, hue=<span class="number">0.1</span>),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=config.IMAGENET_MEAN, std=config.IMAGENET_STD),
+    ])
+
+<span class="keyword">def</span> <span class="string">stratified_split</span>(dataset):
+    <span class="comment">"""Stratified train/val/test split preserving class distribution."""</span>
+    labels = [label <span class="keyword">for</span> _, label <span class="keyword">in</span> dataset.samples]
+    indices = list(range(len(dataset)))
+    train_idx, temp_idx = train_test_split(indices, test_size=<span class="number">0.30</span>, stratify=labels)
+    val_idx, test_idx = train_test_split(temp_idx, test_size=<span class="number">0.50</span>, stratify=temp_labels)
+    <span class="keyword">return</span> Subset(dataset, train_idx), Subset(dataset, val_idx), Subset(dataset, test_idx)
+</pre>
+
+<h3>8.5 evaluate.py — Evaluation &amp; Metrics</h3>
+<pre>
+<span class="comment">"""Evaluation module: comprehensive classification metrics and visualization."""</span>
+
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, precision_score, recall_score, f1_score
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> classification_report, confusion_matrix, top_k_accuracy_score
+
+<span class="decorator">@torch.no_grad()</span>
+<span class="keyword">def</span> <span class="string">evaluate_model</span>(model, test_loader, class_names, load_best=<span class="keyword">True</span>):
+    <span class="comment">"""Comprehensive model evaluation on test set."""</span>
+    <span class="keyword">if</span> load_best:
+        checkpoint = load_checkpoint(model)
+    model = model.to(config.DEVICE)
+
+    <span class="comment"># Run inference &amp; collect predictions</span>
+    all_labels, all_preds, all_probs = get_predictions(model, test_loader, config.DEVICE)
+
+    <span class="comment"># Compute metrics</span>
+    accuracy = accuracy_score(all_labels, all_preds) * <span class="number">100</span>
+    top5_acc = top_k_accuracy_score(all_labels, all_probs, k=<span class="number">5</span>) * <span class="number">100</span>
+    f1_macro = f1_score(all_labels, all_preds, average=<span class="string">"macro"</span>) * <span class="number">100</span>
+    f1_weighted = f1_score(all_labels, all_preds, average=<span class="string">"weighted"</span>) * <span class="number">100</span>
+
+    <span class="comment"># Generate confusion matrix &amp; sample predictions plots</span>
+    plot_confusion_matrix(confusion_matrix(all_labels, all_preds), class_names)
+    plot_sample_predictions(sample_images, all_labels, all_preds, class_names)
+    save_metrics(metrics)
+    <span class="keyword">return</span> metrics
+</pre>
+
+<h3>8.6 main.py — Pipeline Entry Point</h3>
+<pre>
+<span class="comment">"""Main entry point for the Caltech-101 Image Classification Pipeline."""</span>
+
+<span class="keyword">def</span> <span class="string">main</span>():
+    args = parse_args()  <span class="comment"># --mode full/analyze/train/evaluate</span>
+    apply_overrides(args) <span class="comment"># --epochs, --batch-size, --lr overrides</span>
+    set_seed()
+    logger = setup_logging()
+
+    <span class="comment"># Load dataset (no transform — applied per-split)</span>
+    dataset = Caltech101Dataset(data_dir=config.DATA_DIR, transform=<span class="keyword">None</span>)
+
+    <span class="keyword">if</span> args.mode <span class="keyword">in</span> (<span class="string">"analyze"</span>, <span class="string">"full"</span>):
+        stats = run_analyze(dataset)     <span class="comment"># Dataset analysis &amp; distribution plot</span>
+
+    <span class="keyword">if</span> args.mode <span class="keyword">in</span> (<span class="string">"train"</span>, <span class="string">"full"</span>):
+        model, dataset, test_loader = run_train(dataset)  <span class="comment"># Full training</span>
+
+    <span class="keyword">if</span> args.mode <span class="keyword">in</span> (<span class="string">"evaluate"</span>, <span class="string">"full"</span>):
+        metrics = run_evaluate(model, dataset, test_loader)  <span class="comment"># Test evaluation</span>
+
+    <span class="keyword">if</span> args.mode == <span class="string">"full"</span>:
+        print_summary(stats, metrics, total_time)
+
+<span class="comment"># Command used to run:</span>
+<span class="comment"># python main.py --mode full --epochs 30 --batch-size 64 --lr 0.0005</span>
+</pre>
+
+<h3>8.7 requirements.txt</h3>
+<pre>
+torch
+torchvision
+numpy
+matplotlib
+seaborn
+scikit-learn
+Pillow
+tqdm
+</pre>
+
+<!-- 9. CONCLUSION -->
+<h2 id="conclusion">9. Conclusion</h2>
+
+<div class="highlight success">
+<strong>✅ Project Successfully Completed!</strong>
+</div>
+
+<p>The Caltech-101 image classification pipeline achieved excellent results:</p>
+<ul>
+  <li><strong>Test Accuracy: 91.63%</strong> — high overall correctness on unseen data</li>
+  <li><strong>Top-5 Accuracy: 98.77%</strong> — the correct class is almost always in the top 5 predictions</li>
+  <li><strong>F1 (weighted): 91.14%</strong> — well-balanced precision and recall</li>
+  <li><strong>No Overfitting</strong> — validation accuracy (91.55%) closely matches test accuracy (91.63%)</li>
+  <li><strong>Two-Phase Training</strong> — successfully leveraged transfer learning with Phase 1 (frozen backbone) followed by Phase 2 (full fine-tuning)</li>
+  <li><strong>Early Stopping</strong> — triggered at epoch 29, preventing unnecessary computation</li>
+  <li><strong>50+ classes achieved 100% accuracy</strong> on the test set</li>
+</ul>
+
+<h3>Key Findings</h3>
+<table>
+  <tr><th>Finding</th><th>Detail</th></tr>
+  <tr><td>Transfer Learning Effectiveness</td><td>Phase 1 reached 81.49% val acc with only 0.46% trainable params</td></tr>
+  <tr><td>Phase 2 Improvement</td><td>Full fine-tuning boosted accuracy from 81.49% → 91.55% (+10%)</td></tr>
+  <tr><td>Data Augmentation Impact</td><td>Train acc (89%) &lt; Val acc (91.5%) due to augmentation — indicates good generalization</td></tr>
+  <tr><td>Class Imbalance Effect</td><td>Worst classes (water_lilly, platypus) have very few samples (5-6), affecting accuracy</td></tr>
+  <tr><td>Best Model</td><td>Epoch 21, val_acc=91.55%, saved as best_model.pth (43 MB)</td></tr>
+</table>
+
+<div class="footer">
+  <p>Caltech-101 Image Classification with ResNet18 — Complete Report<br>
+  Generated on February 27, 2026 | PyTorch | ResNet18 Transfer Learning</p>
+</div>
+
+</body>
+</html>

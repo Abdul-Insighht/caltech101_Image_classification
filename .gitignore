@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.lib/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+.venv/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+
+# Dataset (Very Large)
+Caltech101_Dataset/
+
+# Model Checkpoints (Large)
+outputs/checkpoints/
+*.pth
+
+# OS files
+.DS_Store
+Thumbs.db
