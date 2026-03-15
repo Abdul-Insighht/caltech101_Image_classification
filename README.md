@@ -1,115 +1,87 @@
-# Caltech-101 Image Classification with ResNet18
+﻿<div align="center">
+  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=caltech101_Image_classification&fontSize=32&fontColor=ffffff&animation=twinkling&fontAlignY=35"/>
+</div>
 
-A complete deep learning pipeline for classifying images from the [Caltech-101](https://www.kaggle.com/datasets/imbikramsaha/caltech-101) dataset using a fine-tuned ResNet18 model built in PyTorch.
+# caltech101_Image_classification
 
-## Project Structure
+Image classification system using the Caltech-101 dataset with deep learning models for multi-class object recognition.
+
+---
+
+## Project Status: âœ… COMPLETE & READY FOR DEPLOYMENT
+
+![GitHub stars](https://img.shields.io/github/stars/Abdul-Insighht/=social)
+![GitHub forks](https://img.shields.io/github/forks/Abdul-Insighht/=social)
+
+---
+
+## ðŸ› ï¸ Tech Stack
 
 ```
-caltech101_classification/
-├── config.py          # Centralized configuration & hyperparameters
-├── dataset.py         # Dataset loading, splitting, augmentation
-├── model.py           # ResNet18 model architecture & fine-tuning
-├── train.py           # Training loop with validation & early stopping
-├── evaluate.py        # Evaluation metrics & visualization
-├── utils.py           # Utilities (logging, plotting, checkpointing)
-├── main.py            # Main entry point (CLI)
-├── requirements.txt   # Python dependencies
-├── README.md          # This file
-├── data/              # Dataset directory (Caltech-101)
-│   └── caltech-101/
-│       └── 101_ObjectCategories/
-│           ├── accordion/
-│           ├── airplanes/
-│           └── ...
-└── outputs/           # Generated outputs
-    ├── checkpoints/   # Model checkpoints
-    ├── plots/         # Training curves, confusion matrix, etc.
-    └── metrics/       # JSON evaluation metrics
+Python, TensorFlow, Keras, OpenCV, NumPy
 ```
 
-## Setup
+---
 
-### 1. Install Dependencies
+## ðŸš€ Getting Started
 
+1. **Clone the repository**
+```bash
+git clone https://github.com/Abdul-Insighht/caltech101_Image_classification.git
+cd caltech101_Image_classification
+```
+
+2. **Install dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Download Dataset
-
-Download the Caltech-101 dataset from Kaggle:
-- URL: https://www.kaggle.com/datasets/imbikramsaha/caltech-101
-- Extract the `101_ObjectCategories` folder into `data/caltech-101/`
-
-Alternatively, using the Kaggle CLI:
+3. **Run the project**
 ```bash
-kaggle datasets download -d imbikramsaha/caltech-101
-# Extract to data/caltech-101/
+python main.py
 ```
 
-## Usage
+---
 
-### Run Full Pipeline (Recommended)
+## â­ Quick Links
 
-```bash
-python main.py --mode full
-```
+â­ [Star this repo](https://github.com/Abdul-Insighht/caltech101_Image_classification) â€¢ ðŸ› [Report Bug](https://github.com/Abdul-Insighht/caltech101_Image_classification/issues) â€¢ ðŸ’¡ [Request Feature](https://github.com/Abdul-Insighht/caltech101_Image_classification/issues)
 
-### Individual Modes
+---
 
-```bash
-# Analyze dataset only
-python main.py --mode analyze
+Made with â¤ï¸ using Python & AI Technologies â€” Demonstration by **Abdul-Insighht** - Data Science Specialist | AI Agent & Agentic AI Developer
 
-# Train model
-python main.py --mode train
+---
 
-# Evaluate saved model
-python main.py --mode evaluate
-```
+## ðŸ‘¤ Author
 
-### Override Hyperparameters
+<table>
+<tr>
+<td>
 
-```bash
-python main.py --mode full --epochs 30 --batch-size 64 --lr 0.0005
-```
+**Hafiz Abdul Rehman**  
+[Abdul-Insighht](https://github.com/Abdul-Insighht) Â· he/him  
+**Data Science Specialist | AI Agent & Agentic AI Developer**
 
-## Model Architecture
+[![GitHub](https://img.shields.io/badge/GitHub-Abdul--Insighht-181717?style=flat-square&logo=github)](https://github.com/Abdul-Insighht)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/hafiz-abdul-rehman-9990ab329/)
 
-- **Base Model**: ResNet18 with ImageNet pretrained weights
-- **Modifications**:
-  - Dropout (0.5) before final fully connected layer
-  - FC layer resized for 101 classes (excluding background)
-- **Training Strategy**:
-  - **Phase 1** (Epochs 1–5): Backbone frozen, train classification head only
-  - **Phase 2** (Epochs 6–25): Full fine-tuning with differential learning rates
-- **Data Augmentation**: RandomResizedCrop, HorizontalFlip, Rotation(15°), ColorJitter
-- **Optimizer**: Adam with weight decay (1e-4)
-- **Scheduler**: StepLR (decay every 7 epochs by 0.1)
-- **Early Stopping**: Patience of 7 epochs
+</td>
+</tr>
+</table>
 
-## Evaluation Metrics
+---
 
-- Test Accuracy & Top-5 Accuracy
-- Precision, Recall, F1-Score (macro & weighted)
-- Per-class classification report
-- Confusion matrix heatmap
-- Sample predictions visualization
+## ðŸ“„ License
 
-## Output Files
+This project is licensed under the **MIT License**.
 
-After training, the following files are generated in `outputs/`:
+---
 
-| File | Description |
-|------|-------------|
-| `checkpoints/best_model.pth` | Best model checkpoint |
-| `plots/training_history.png` | Loss & accuracy curves |
-| `plots/confusion_matrix.png` | Confusion matrix heatmap |
-| `plots/sample_predictions.png` | Sample prediction grid |
-| `plots/class_distribution.png` | Dataset class distribution |
-| `metrics/evaluation_metrics.json` | All evaluation metrics |
-| `metrics/dataset_analysis.json` | Dataset statistics |
-| `technical_summary.txt` | Human-readable summary |
-| `training.log` | Full training log |
-"# Image-Classification-through-caltech-101" 
-"# Image-Classification-through-caltech-101" 
+<div align="center">
+  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=100&section=footer"/>
+</div>
+
+<div align="center">
+  <sub>â­ï¸ From <a href="https://github.com/Abdul-Insighht">Abdul-Insighht</a> â€” Passionate about AI, ML, and solving real-world problems</sub>
+</div>
